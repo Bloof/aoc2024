@@ -13,11 +13,14 @@ object AocClient {
         throw RuntimeException("Failed to read cookie: ${it.message}", it)
     }
 
-    suspend fun getAocDayInput(day: Int): Array<String> {
+    suspend fun getAocDayInput(day: Int, returnType: InputReturnType = InputReturnType.ARRAY): Any {
         val file = File("inputs/$day.txt")
 
         if (file.exists()) {
-            return getDayInputAsArray(day)
+            return when (returnType) {
+                InputReturnType.STRING -> getDayInputAsString(day)
+                InputReturnType.ARRAY -> getDayInputAsArray(day)
+            }
         }
 
         runCatching {
@@ -33,7 +36,18 @@ object AocClient {
             throw RuntimeException("Failed to fetch input for day $day: ${it.message}", it)
         }
 
-        return getDayInputAsArray(day)
+        return when (returnType) {
+            InputReturnType.STRING -> getDayInputAsString(day)
+            InputReturnType.ARRAY -> getDayInputAsArray(day)
+        }
+    }
+
+    private fun getDayInputAsString(day: Int): String {
+        return runCatching {
+            File("inputs/$day.txt").readText().trim()
+        }.getOrElse {
+            throw RuntimeException("Failed to parse input for day $day: ${it.message}", it)
+        }
     }
 
     private fun getDayInputAsArray(day: Int): Array<String> {
@@ -44,4 +58,9 @@ object AocClient {
         }
     }
 
+    // Enum to specify the return type
+    enum class InputReturnType {
+        STRING,
+        ARRAY
+    }
 }

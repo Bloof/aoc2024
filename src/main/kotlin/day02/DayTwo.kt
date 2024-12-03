@@ -6,7 +6,7 @@ object DayTwo {
 
 
     suspend fun solvePuzzle() {
-        val data = AocClient.getAocDayInput(2)
+        val data = AocClient.getAocDayInput(2) as Array<String>
         val safeAndUnsafeRecords = partOne(data)
         partTwo(safeAndUnsafeRecords)
     }

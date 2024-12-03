@@ -6,7 +6,7 @@ import kotlin.math.abs
 object DayOne {
 
     suspend fun solvePuzzle() {
-        val data = AocClient.getAocDayInput(1)
+        val data = AocClient.getAocDayInput(1, AocClient.InputReturnType.ARRAY) as Array<String>
         partOne(data)
         partTwo(data)
     }
